@@ -1,6 +1,8 @@
 package ca.verticaldigital.notifier.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +12,7 @@ import java.util.Date;
 public class Person {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
     private String firstName;
     private String lastName;
@@ -76,5 +79,18 @@ public class Person {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", birthdate=" + birthdate +
+                ", city='" + city + '\'' +
+                ", deleted=" + deleted +
+                '}';
     }
 }

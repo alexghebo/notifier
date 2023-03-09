@@ -1,4 +1,4 @@
-package ca.verticaldigital.notifier;
+package ca.verticaldigital.notifier.controller;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.service.PersonService;

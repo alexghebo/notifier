@@ -1,12 +1,16 @@
 package ca.verticaldigital.notifier.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
 @Entity
 public class Person {
+
+    @Id
+    private long id;
     private String firstName;
     private String lastName;
     private String email;

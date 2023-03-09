@@ -2,47 +2,40 @@ package ca.verticaldigital.notifier.controller;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.service.PersonService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 public class PersonController {
-
     private final PersonService personService;
 
     public PersonController(PersonService personService) {
         this.personService = personService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable Long id) {
-        Person person = personService.getPersonById(id);
-        return ResponseEntity.ok(person);
+    @GetMapping("/person/{id}")
+    public Person getPersonById(@PathVariable Long id) {
+        return personService.getPersonById(id);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Person>> getAllPersons() {
-        List<Person> persons = personService.getAllPersons();
-        return ResponseEntity.ok(persons);
+    @GetMapping("/person")
+    public List<Person> getAllPersons() {
+        return personService.getAllPersons();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePerson(@PathVariable Long id, @RequestBody Person updatedPerson) {
-        personService.updatePerson(id, updatedPerson);
-        return ResponseEntity.ok().build();
+    @PutMapping("/person/{id}")
+    public Person updatePerson(@PathVariable Long id, @RequestBody Person person) {
+        return personService.updatePerson(id, person);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createPerson(@RequestBody Person newPerson) {
-        personService.createPerson(newPerson);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PostMapping("/person")
+    public Person createPerson(@RequestBody Person person) {
+        return personService.createPerson(person);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
-        personService.deletePerson(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/person/{id}")
+    public void deletePerson(@PathVariable Long id) {
+        personService.softDeletePerson(id);
     }
 }

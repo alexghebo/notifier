@@ -1,31 +1,36 @@
 package ca.verticaldigital.notifier.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
 @Entity
 public class Person {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private long id;
     private String firstName;
     private String lastName;
     private String email;
     private Date birthdate;
     private String city;
     private boolean deleted;
-    private int id;
 
     public Person() {
     }
 
-    public Person(String firstName, String lastName, String email, Date birthdate, String city, boolean deleted, int id) {
+    public Person(String firstName, String lastName, String email, Date birthdate, String city, boolean deleted) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthdate = birthdate;
         this.city = city;
         this.deleted = deleted;
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -76,19 +81,28 @@ public class Person {
         this.deleted = deleted;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId() {
+    public void setId(long id) {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", birthdate=" + birthdate +
+                ", city='" + city + '\'' +
+                ", deleted=" + deleted +
+                '}';
+    }
+
 }
-
-
-
-
 
 
 

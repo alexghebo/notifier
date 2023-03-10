@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -22,11 +23,11 @@ public class Person {
     private String firstName;
     private String lastName;
     private String email;
-    private Date birthdate;
+    private LocalDate birthdate;
     private String city;
     private boolean deleted;
 
-    public Person(String firstName, String lastName, String email, Date birthdate, String city, boolean deleted) {
+    public Person(String firstName, String lastName, String email, LocalDate birthdate, String city, boolean deleted) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

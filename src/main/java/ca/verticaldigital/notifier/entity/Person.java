@@ -1,9 +1,6 @@
 package ca.verticaldigital.notifier.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,16 +11,30 @@ import java.util.Date;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @ToString
+@Table
 public class Person {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column
     private long id;
+
+    @Column
     private String firstName;
+
+    @Column
     private String lastName;
+
+    @Column
     private String email;
+
+    @Column
     private Date birthdate;
+
+    @Column
     private String city;
+
+    @Column
     private boolean deleted;
 
     public Person(String firstName, String lastName, String email, Date birthdate, String city, boolean deleted) {

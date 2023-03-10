@@ -10,6 +10,7 @@ public class NotifierApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NotifierApplication.class, args);
 
+
 	}
 
 }

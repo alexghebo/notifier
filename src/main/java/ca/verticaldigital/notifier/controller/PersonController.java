@@ -2,6 +2,8 @@ package ca.verticaldigital.notifier.controller;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.service.PersonService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +39,15 @@ public class PersonController {
     @DeleteMapping("/person/{id}")
     public void deletePerson(@PathVariable Long id) {
         personService.softDeletePerson(id);
+    }
+
+    @PostMapping("/createPersons")
+    public void createMultiplePersons(@RequestBody String jsonBody) throws Exception {
+            final ObjectMapper objectMapper = new ObjectMapper();
+            //Person[] persons = objectMapper.readValue(jsonBody, Person[].class);
+
+            List<Person> personsList = objectMapper.readValue(jsonBody, new TypeReference<List<Person>>() {
+        });
+
     }
 }

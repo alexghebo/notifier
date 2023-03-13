@@ -4,6 +4,8 @@ import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.service.PersonService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,11 +45,16 @@ public class PersonController {
 
     @PostMapping("/createPersons")
     public void createMultiplePersons(@RequestBody String jsonBody) throws Exception {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            //Person[] persons = objectMapper.readValue(jsonBody, Person[].class);
+        final ObjectMapper objectMapper = new ObjectMapper();
 
-            List<Person> personsList = objectMapper.readValue(jsonBody, new TypeReference<List<Person>>() {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        List<Person> personsList = objectMapper.readValue(jsonBody, new TypeReference<List<Person>>() {
         });
 
+        personsList.forEach(person -> System.out.println(person.toString()));
+
+        personsList.forEach(person -> personService.createPerson(person));
     }
 }

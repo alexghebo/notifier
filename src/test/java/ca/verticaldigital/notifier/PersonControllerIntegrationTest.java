@@ -18,10 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDate;
 import java.util.Date;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -115,6 +113,22 @@ class PersonControllerIntegrationTest {
                 .andExpect(jsonPath("$.email").value(person1.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(person1.getBirthdate().toString()))
                 .andExpect(jsonPath("$.city").value(person1.getCity()));
+    }
+
+    @Test
+    public void POSTCreatePerson() throws Exception {
+        Person person3 =
+                new Person("eu", "eu", "eu", LocalDate.of(2022, 02, 02), "eu", false);
+        mockMvc.perform(post("/person")
+                        .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(person3)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.firstName").value(person3.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(person3.getLastName()))
+                .andExpect(jsonPath("$.email").value(person3.getEmail()))
+                .andExpect(jsonPath("$.birthdate").value(person3.getBirthdate().toString()))
+                .andExpect(jsonPath("$.city").value(person3.getCity()));
+
     }
 
     @Test

@@ -13,12 +13,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-import static org.springframework.http.RequestEntity.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +36,8 @@ class PersonControllerIntegrationTest {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
     private Person person1;
     private Person person2;
 
@@ -103,14 +106,14 @@ class PersonControllerIntegrationTest {
         person1.setBirthdate(LocalDate.of(1998, 02, 02));
         person1.setCity("Updated City");
 
-        mockMvc.perform((RequestBuilder) put("/person/{id}", person1.getId())
+        mockMvc.perform(put("/person/{id}", person1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.valueOf(objectMapper.writeValueAsString(person1))))
+                        .content(objectMapper.writeValueAsString(person1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value(person1.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(person1.getLastName()))
                 .andExpect(jsonPath("$.email").value(person1.getEmail()))
-                .andExpect(jsonPath("$.birthdate").value(person1.getBirthdate().toString()))
+                .andExpect(jsonPath("$.birthDate").value(person1.getBirthdate().toString()))
                 .andExpect(jsonPath("$.city").value(person1.getCity()));
     }
 

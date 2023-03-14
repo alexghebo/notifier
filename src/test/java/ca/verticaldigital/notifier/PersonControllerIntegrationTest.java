@@ -113,7 +113,7 @@ class PersonControllerIntegrationTest {
                 .andExpect(jsonPath("$.firstName").value(person1.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(person1.getLastName()))
                 .andExpect(jsonPath("$.email").value(person1.getEmail()))
-                .andExpect(jsonPath("$.birthDate").value(person1.getBirthdate().toString()))
+                .andExpect(jsonPath("$.birthdate").value(person1.getBirthdate().toString()))
                 .andExpect(jsonPath("$.city").value(person1.getCity()));
     }
 

@@ -118,7 +118,7 @@ class PersonControllerIntegrationTest {
     @Test
     public void POSTCreatePerson() throws Exception {
         Person person3 =
-                new Person("eu", "eu", "eu", LocalDate.of(2022, 02, 02), "eu", false);
+                new Person("Robert", "Andrei", "robert.andrei@vd.ro", LocalDate.of(2022, 02, 02), "Oradea", false);
         mockMvc.perform(post("/person")
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(person3)))
                 .andExpect(status().isOk())

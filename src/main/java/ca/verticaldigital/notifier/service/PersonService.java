@@ -5,6 +5,9 @@ import ca.verticaldigital.notifier.repository.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,5 +45,12 @@ public class PersonService {
         existingPerson.setDeleted(true);
         personRepository.save(existingPerson);
     }
-}
 
+    public List<Person> getBirthdays() {
+        LocalDate currentDate = LocalDate.now();
+
+        LocalDate beforeDate = currentDate.plusDays(30);
+
+        return personRepository.findAllByBirthdateBetween(currentDate, beforeDate);
+    }
+}

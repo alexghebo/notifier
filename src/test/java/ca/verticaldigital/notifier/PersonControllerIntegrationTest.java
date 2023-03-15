@@ -2,10 +2,13 @@ package ca.verticaldigital.notifier;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.repository.PersonRepository;
+import ca.verticaldigital.notifier.service.PersonService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +16,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.print.attribute.standard.Media;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -116,7 +122,7 @@ class PersonControllerIntegrationTest {
     }
 
     @Test
-    public void POSTCreatePerson() throws Exception {
+    public void PostCreatePerson() throws Exception {
         Person person3 =
                 new Person("Robert", "Andrei", "robert.andrei@vd.ro", LocalDate.of(2022, 02, 02), "Oradea", false);
         mockMvc.perform(post("/person")
@@ -128,6 +134,39 @@ class PersonControllerIntegrationTest {
                 .andExpect(jsonPath("$.email").value(person3.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(person3.getBirthdate().toString()))
                 .andExpect(jsonPath("$.city").value(person3.getCity()));
+
+    }
+
+    @Test
+    public void DeletePerson() throws Exception {
+
+        //test1
+        Person person3;
+        person3 = new Person();
+        person3.setFirstName("J");
+        person3.setLastName("Carol");
+        person3.setEmail("jcarol@example.com");
+        person3.setBirthdate(LocalDate.of(1998, 02, 02));
+        person3.setCity("Sibiu");
+        person3.setDeleted(false);
+        personRepository.save(person3);
+
+        mockMvc.perform(delete("/person/{id}", person3.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        Optional<Person> deletedPerson = personRepository.findById(person3.getId());
+
+        assert(deletedPerson.isPresent());
+        assert(deletedPerson.get().isDeleted());
+
+        //test2
+        mockMvc.perform(delete("/person/{id}", person1.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        Optional<Person> deletedPersonAnother = personRepository.findById(person1.getId());
+
+        assert(deletedPersonAnother.isPresent());
+        assert(deletedPersonAnother.get().isDeleted());
 
     }
 

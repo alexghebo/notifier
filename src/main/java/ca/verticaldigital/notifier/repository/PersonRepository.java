@@ -12,4 +12,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByDeleted(boolean deleted);
 
     List<Person> findAllByBirthdateBetween(LocalDate currentDate, LocalDate beforeDate);
+
+    List<Person> findByBirthdate(LocalDate birthdate);
 }

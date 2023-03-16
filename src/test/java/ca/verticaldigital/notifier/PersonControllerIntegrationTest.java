@@ -2,28 +2,32 @@ package ca.verticaldigital.notifier;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.repository.PersonRepository;
-import ca.verticaldigital.notifier.service.PersonService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assert;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.MvcResult;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.print.attribute.standard.Media;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -180,5 +184,29 @@ class PersonControllerIntegrationTest {
         person1.setCity("Bucuresti");
         person1.setDeleted(false);
     }
+
+
+    @Test
+    public void getBirthdays() throws Exception {
+        LocalDate today = LocalDate.now();
+        LocalDate thirtyDaysFromNow = today.plusDays(30);
+
+        Person person1 = new Person("John", "D", "johnd@example.com", LocalDate.of(1990, 5, 15), "Suceava", false);
+        Person person2 = new Person("Lara", "Dan", "laradan@example.com", LocalDate.of(1992, 8, 23), "Ploiesti", false);
+        Person person3 = new Person("Andrei", "Popescu", "andreipopescu@example.com", thirtyDaysFromNow, "Suceava", false);
+
+        personRepository.save(person1);
+        personRepository.save(person2);
+        personRepository.save(person3);
+
+        mockMvc.perform(get("/birthdays"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName").value(person3.getFirstName()))
+                .andExpect(jsonPath("$[0].lastName").value(person3.getLastName()))
+                .andExpect(jsonPath("$[0].email").value(person3.getEmail()))
+                .andExpect(jsonPath("$[0].birthdate").value(person3.getBirthdate().toString()))
+                .andExpect(jsonPath("$[0].city").value(person3.getCity()));
+    }
+
 
 }

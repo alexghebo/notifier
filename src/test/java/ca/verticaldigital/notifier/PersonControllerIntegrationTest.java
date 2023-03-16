@@ -4,7 +4,7 @@ import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.repository.PersonRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,17 +15,23 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import static org.assertj.core.api.Assertions.assertThat;
+
+
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -185,6 +191,32 @@ class PersonControllerIntegrationTest {
         person1.setDeleted(false);
     }
 
+    public void createPersons() throws Exception {
+        List<Person> persons = Arrays.asList(
+                new Person("John", "Doe", "john.doe@example.com", LocalDate.of(1990, 1, 1), "New York", false),
+                new Person("Jane", "Doe", "jane.doe@example.com", LocalDate.of(1992, 2, 2), "Los Angeles", false),
+                new Person("Bob", "Smith", "bob.smith@example.com", LocalDate.of(1985, 3, 3), "Chicago", false)
+        );
+
+        mockMvc.perform(post("/createPersons")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(persons)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(persons.size()))
+                .andExpect(jsonPath("$[0].firstName").value("John"))
+                .andExpect(jsonPath("$[0].lastName").value("Doe"))
+                .andExpect(jsonPath("$[1].firstName").value("Jane"))
+                .andExpect(jsonPath("$[1].lastName").value("Doe"))
+                .andExpect(jsonPath("$[2].firstName").value("Bob"))
+                .andExpect(jsonPath("$[2].lastName").value("Smith"));
+
+        // Verify that the persons were saved to the database
+        List<Person> savedPersons = personRepository.findAll();
+        assertThat(savedPersons.size()).isEqualTo(persons.size());
+        assertThat(savedPersons.get(0).getFirstName()).isEqualTo("John");
+        assertThat(savedPersons.get(1).getFirstName()).isEqualTo("Jane");
+        assertThat(savedPersons.get(2).getFirstName()).isEqualTo("Bob");
+    }
 
     @Test
     public void getBirthdays() throws Exception {

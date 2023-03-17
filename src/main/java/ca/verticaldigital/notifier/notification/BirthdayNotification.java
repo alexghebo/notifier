@@ -2,63 +2,30 @@ package ca.verticaldigital.notifier.notification;
 
 import ca.verticaldigital.notifier.entity.Person;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter @Setter
 public class BirthdayNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Person person;
 
-    @Column(name = "created_date")
+    @Column
     private LocalDateTime createdDate;
 
-    @Column(name = "email_status")
+    @Column
     private boolean emailStatus;
 
-    public BirthdayNotification(){
-        this.person = person;
-        this.createdDate = createdDate;
-        this.emailStatus = emailStatus;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setEmailStatus(boolean emailStatus) {
-        this.emailStatus = emailStatus;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public boolean getEmailStatus() {
-        return emailStatus;
-    }
 }
 

@@ -13,7 +13,6 @@ public interface BirthdayNotificationRepository extends JpaRepository<BirthdayNo
 
         List<BirthdayNotification> findByPersonId(Long personId);
 
-        // Add any other custom query methods as needed
 
 }
 

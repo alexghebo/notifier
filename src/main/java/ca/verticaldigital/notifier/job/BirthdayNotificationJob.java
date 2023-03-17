@@ -5,6 +5,8 @@ import ca.verticaldigital.notifier.notification.BirthdayNotification;
 import ca.verticaldigital.notifier.repository.BirthdayNotificationRepository;
 import ca.verticaldigital.notifier.repository.PersonRepository;
 import ca.verticaldigital.notifier.service.EmailService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,17 +29,28 @@ public class BirthdayNotificationJob {
         this.emailService = emailService;
     }
 
+    public void setCreatedDate(LocalDateTime now) {
+    }
+
+    public void setPerson(Person person) {
+    }
+
+    public void setEmailStatus(boolean b) {
+    }
     @Scheduled(cron = "0 0 8 * * *") // runs every day at 8:00 AM
     public void createBirthdayNotifications() {
         LocalDate today = LocalDate.now();
-        List<Person> peopleWithBirthdayToday = personRepository.findByBirthdate(today);
-        for (Person person : peopleWithBirthdayToday) {
-            BirthdayNotification notification = new BirthdayNotification();
-            notification.setPerson(person);
-            notification.setCreatedDate(LocalDateTime.now());
-            notification.setEmailStatus(false);
-            notificationRepository.save(notification);
-            emailService.sendBirthdayNotification(person.getEmail());
-        }
+        List<Person> persons = personRepository.findAll();
+        persons.stream()
+                .filter(person -> person.getBirthdate().getDayOfMonth() == today.getDayOfMonth() && person.getBirthdate().getMonth() == today.getMonth())
+                .forEach(person -> {
+                    BirthdayNotification notification = new BirthdayNotification();
+                    notification.setCreatedDate(LocalDateTime.now());
+                    notification.setPerson(person);
+                    notification.setEmailStatus(false);
+                    notificationRepository.save(notification);
+                });
+        System.out.println("Birthday Notification Job ran at " + LocalDateTime.now());
+
     }
 }

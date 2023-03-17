@@ -1,13 +1,13 @@
 package ca.verticaldigital.notifier.notification;
 
 import ca.verticaldigital.notifier.entity.Person;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
-
+//import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

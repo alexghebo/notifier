@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

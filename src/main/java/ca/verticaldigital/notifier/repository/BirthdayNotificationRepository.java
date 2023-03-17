@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface BirthdayNotificationRepository extends JpaRepository<BirthdayNotification, Long> {
 
 

@@ -5,8 +5,6 @@ import ca.verticaldigital.notifier.notification.BirthdayNotification;
 import ca.verticaldigital.notifier.repository.BirthdayNotificationRepository;
 import ca.verticaldigital.notifier.repository.PersonRepository;
 import ca.verticaldigital.notifier.service.EmailService;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,14 +27,6 @@ public class BirthdayNotificationJob {
         this.emailService = emailService;
     }
 
-    public void setCreatedDate(LocalDateTime now) {
-    }
-
-    public void setPerson(Person person) {
-    }
-
-    public void setEmailStatus(boolean b) {
-    }
     @Scheduled(cron = "0 0 8 * * *") // runs every day at 8:00 AM
     public void createBirthdayNotifications() {
         LocalDate today = LocalDate.now();

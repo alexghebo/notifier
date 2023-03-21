@@ -31,6 +31,7 @@ public class BirthdayNotificationJob {
     public void createBirthdayNotifications() {
         LocalDate today = LocalDate.now();
         List<Person> persons = personRepository.findAll();
+        //List<Person> persons = personRepository.findAll();
         persons.stream()
                 .filter(person -> person.getBirthdate().getDayOfMonth() == today.getDayOfMonth() && person.getBirthdate().getMonth() == today.getMonth())
                 .forEach(person -> {

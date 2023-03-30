@@ -7,21 +7,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-    private String to;
+    private String recipient;
     private String subject;
     private String body;
     @Autowired
-    private JavaMailSender emailSender;
+    private JavaMailSender javaMailSender;
 
-    public void sendBirthdayNotification(String to) {
+    public void sendBirthdayNotification(String recipient, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
+        message.setTo(recipient);
         message.setSubject(subject);
         message.setText(body);
-        emailSender.send(message);
+        javaMailSender.send(message);
+        System.out.println("Email sent to " + recipient + " with body: " + body);
+
 
         // Log email information to console
-        System.out.println("Email sent to: " + to);
+        System.out.println("Email sent to: " + recipient);
         System.out.println("Email body:\n" + body);
         }
     }

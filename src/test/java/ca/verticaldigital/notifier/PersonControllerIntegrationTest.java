@@ -2,9 +2,7 @@ package ca.verticaldigital.notifier;
 
 import ca.verticaldigital.notifier.entity.Person;
 import ca.verticaldigital.notifier.repository.PersonRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,26 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import static org.assertj.core.api.Assertions.assertThat;
-
-
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

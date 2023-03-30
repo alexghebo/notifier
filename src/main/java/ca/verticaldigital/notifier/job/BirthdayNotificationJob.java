@@ -28,19 +28,30 @@ public class BirthdayNotificationJob {
     }
 
     @Scheduled(cron = "0 0 8 * * *") // runs every day at 8:00 AM
-    public void createBirthdayNotifications() {
+    public void sendBirthdayNotifications() {
         LocalDate today = LocalDate.now();
+        LocalDate startDate = today.plusDays(1);
+        LocalDate endDate = today.plusDays(30);
         List<Person> persons = personRepository.findAll();
         //List<Person> persons = personRepository.findAll();
-        persons.stream()
-                .filter(person -> person.getBirthdate().getDayOfMonth() == today.getDayOfMonth() && person.getBirthdate().getMonth() == today.getMonth())
-                .forEach(person -> {
-                    BirthdayNotification notification = new BirthdayNotification();
-                    notification.setCreatedDate(LocalDateTime.now());
-                    notification.setPerson(person);
-                    notification.setEmailStatus(false);
-                    notificationRepository.save(notification);
-                });
+//        persons.stream()
+//                .filter(person -> person.getBirthdate().getDayOfMonth() == today.getDayOfMonth() && person.getBirthdate().getMonth() == today.getMonth())
+//                .forEach(person -> {
+//                    BirthdayNotification notification = new BirthdayNotification();
+//                    notification.setCreatedDate(LocalDateTime.now());
+//                    notification.setPerson(person);
+//                    notification.setEmailStatus(false);
+//                    notificationRepository.save(notification);
+//                });
+        for (Person person : persons) {
+            String recipient = person.getEmail();
+            String subject = "Happy Birthday!";
+            String body = "Dear " + person.getFirstName() + ",\n\n"
+                    + "Happy Birthday from us!\n\n"
+                    + "Have a great day,\n"
+                    + "Vertical Digital Team";
+            emailService.sendBirthdayNotification(recipient, subject, body);
+        }
         System.out.println("Birthday Notification Job ran at " + LocalDateTime.now());
 
     }

@@ -5,6 +5,7 @@ import ca.verticaldigital.notifier.notification.BirthdayNotification;
 import ca.verticaldigital.notifier.repository.BirthdayNotificationRepository;
 import ca.verticaldigital.notifier.repository.PersonRepository;
 import ca.verticaldigital.notifier.service.EmailService;
+import ca.verticaldigital.notifier.service.SlackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,15 @@ public class BirthdayNotificationJob {
     private final PersonRepository personRepository;
     private final BirthdayNotificationRepository notificationRepository;
     private final EmailService emailService;
+    private final SlackService slackService;
+
 
     @Autowired
-    public BirthdayNotificationJob(PersonRepository personRepository, BirthdayNotificationRepository notificationRepository, EmailService emailService) {
+    public BirthdayNotificationJob(PersonRepository personRepository, BirthdayNotificationRepository notificationRepository, EmailService emailService, SlackService slackService) {
         this.personRepository = personRepository;
         this.notificationRepository = notificationRepository;
         this.emailService = emailService;
+        this.slackService = slackService;
     }
 
     @Scheduled(cron = "0 0 8 * * *") // runs every day at 8:00 AM
@@ -54,5 +58,16 @@ public class BirthdayNotificationJob {
         }
         System.out.println("Birthday Notification Job ran at " + LocalDateTime.now());
 
-    }
+        for (Person person : persons) {
+            String message = String.format("Happy Birthday, " + person.getFirstName() + "! 🎂🎉🎁");
+            slackService.sendMessage(message);
+            BirthdayNotification notification = new BirthdayNotification();
+            notification.setPerson(person);
+            notification.setEmailStatus(false);
+            notificationRepository.save(notification);
+        }
+
+
+
+}
 }

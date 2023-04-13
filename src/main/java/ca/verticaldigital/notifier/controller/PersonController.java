@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,7 +55,7 @@ public class PersonController {
 
         personsList.forEach(person -> System.out.println(person.toString()));
 
-        personsList.forEach(person -> personService.createPerson(person));
+        personsList.forEach(personService::createPerson);
     }
 
     @GetMapping("/birthdays")
@@ -64,5 +63,10 @@ public class PersonController {
 
     return personService.getBirthdays();
 
+    }
+
+    @PutMapping("/person/{id}/birth_day")
+    public Person updateBirthdays(@PathVariable Long id, @RequestBody Person birthdate) {
+        return personService.updateBirthday(id, birthdate);
     }
 }

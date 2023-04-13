@@ -66,7 +66,7 @@ public class PersonController {
     }
 
     @PutMapping("/person/{id}/birth_day")
-    public Person updateBirthdays(@PathVariable Long id, @RequestBody Person birthdate) {
-        return personService.updateBirthday(id, birthdate);
+    public Person updateBirthdays(@PathVariable Long id, @RequestBody Person birthday) {
+        return personService.updateBirthday(id, birthday);
     }
 }
